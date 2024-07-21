@@ -1,0 +1,58 @@
+---
+import PlayIcon from "@/icons/Play.astro"
+import TimeIcon from "@/icons/Time.astro"
+import { type Song } from "@/lib/data"
+import { usePlayerStore } from "@/store/playerStore"
+import { PauseIcon } from "./Player"
+import PlaylistSongPlayButton from "@/components/PlaylistSongPlayButton"
+
+interface Props {
+  songs: Song[]
+}
+const { currentMusic, isPlaying } = usePlayerStore.getState()
+const { songs } = Astro.props
+---
+
+<table class="table-auto text-left min-w-full divide-y-2 divide-gray-500/50">
+  <thead class="h-10">
+    <tr class="text-zinc-400 text-sm">
+      <th class="text-center">#</th>
+      <th>Título</th>
+      <th>Album</th>
+      <th>Artista</th>
+      <th><TimeIcon /></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="h-2"></tr>
+    {
+      songs.map((song, n) => (
+        <tr class="group text-sm font-light hover:bg-zinc-400/20 transition-all duration-300">
+          <td class="min-w-11 rounded-tl-md rounded-bl-md">
+            <PlaylistSongPlayButton client:load song={song} n={n + 1} />
+          </td>
+          <td>
+            <div class="flex gap-2 items-center py-2">
+              <picture class="w-10 aspect-auto overflow-hidden rounded-md">
+                <img src={song.image} alt="" />
+              </picture>
+              <div class="flex flex-col">
+                <p class="font-medium">{song.title}</p>
+                <small class="text-zinc-400">{song.artists.join(", ")}</small>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p>{song.album}</p>
+          </td>
+          <td>
+            <p class="">{song.artists.join(", ")}</p>
+          </td>
+          <td class="rounded-tr-md rounded-br-md">
+            <p>{song.duration}</p>
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
