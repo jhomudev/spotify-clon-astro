@@ -1,9 +1,7 @@
-import {allPlaylists, songs} from '@/lib/data.ts'
+import { allPlaylists, songs } from '@/lib/data.ts'
+import type { APIRoute } from 'astro'
 
-export const GET = async ({ params, request }: {
-  params: { id: string }
-  request: Request
-}) => { 
+export const GET: APIRoute = async ({ request }) => {
   const query = new URL(request.url).searchParams
   const playlistId = query.get('id')
   const playlist = allPlaylists.find((playlist) => playlist.id === playlistId)
@@ -13,8 +11,6 @@ export const GET = async ({ params, request }: {
     playlist,
     songs: playlistSongs
   }), {
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    status: 200,
   })
 }
